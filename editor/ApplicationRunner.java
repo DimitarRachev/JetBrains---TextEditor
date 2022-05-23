@@ -1,7 +1,6 @@
 package editor;
 
 
-import javax.swing.*;
 
 
 public class ApplicationRunner {

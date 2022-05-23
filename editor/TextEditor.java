@@ -2,6 +2,9 @@ package editor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,6 +12,8 @@ import java.nio.file.Files;
 
 public class TextEditor extends JFrame {
     JTextArea textArea;
+    JMenuBar menuBarFile;
+    JTextField fileInputField;
 
     public TextEditor() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,7 +23,62 @@ public class TextEditor extends JFrame {
         textArea = setTextArea();
         add(setScroll(textArea), BorderLayout.CENTER);
         add(setFileArea(), BorderLayout.NORTH);
+        menuBarFile = setFileMenu();
+        setJMenuBar(menuBarFile);
         setVisible(true);
+    }
+
+    private JMenuBar setFileMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        fileMenu.setName("MenuFile");
+
+        JMenuItem loadMenuItem = new JMenuItem("Load");
+        loadMenuItem.setName("MenuLoad");
+        JMenuItem saveMenuItem = new JMenuItem("Save");
+        saveMenuItem.setName("MenuSave");
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.setName("MenuExit");
+
+        fileMenu.add(loadMenuItem);
+        fileMenu.add(saveMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitMenuItem);
+
+        loadMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String file = fileInputField.getText();
+                try {
+                    loadFile(file);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
+        saveMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String file = fileInputField.getText();
+                String text = textArea.getText();
+                try {
+                    saveFile(file, text);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        exitMenuItem.addActionListener(e -> {
+            this.dispose();
+            System.exit(0);
+        });
+
+        menuBar.add(fileMenu);
+        return menuBar;
     }
 
     private JTextArea setTextArea() {
@@ -29,7 +89,7 @@ public class TextEditor extends JFrame {
 
     private JPanel setFileArea() {
         JPanel fileArea = new JPanel();
-        JTextField fileInputField = new JTextField(15);
+        fileInputField = new JTextField(15);
         fileInputField.setSize(30, 100);
         fileInputField.setVisible(true);
         fileInputField.setName("FilenameField");

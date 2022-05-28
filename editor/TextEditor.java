@@ -50,16 +50,20 @@ public class TextEditor extends JFrame {
 
         JMenuItem startSearch = new JMenuItem("Start search");
         searchMenu.setName("MenuStartSearch");
+
         JMenuItem previousSearch = new JMenuItem("Previous search");
         searchMenu.setName("MenuPreviousMatch");
+
         JMenuItem nextMatch = new JMenuItem("Next match");
         searchMenu.setName("MenuNextMatch");
+
         JMenuItem useRegEx = new JMenuItem("Use regular expressions");
         searchMenu.setName("MenuUseRegExp");
 
-//TODO add action Listeners to menu items only previous case remains
-        startSearch.addActionListener( e -> startSearch());
-        nextMatch.addActionListener( e -> searchNext());
+        startSearch.addActionListener(e -> startSearch());
+        nextMatch.addActionListener(e -> searchNext());
+        previousSearch.addActionListener(e -> searchPrevious());
+        useRegEx.addActionListener(e -> reverseRegEx());
 
         searchMenu.add(startSearch);
         searchMenu.add(previousSearch);
@@ -147,10 +151,14 @@ public class TextEditor extends JFrame {
         useRegEx.setName("UseRegExCheckbox");
 
         useRegEx.addActionListener(e -> {
-            isRegex = !isRegex;
+            reverseRegEx();
         });
 
         return useRegEx;
+    }
+
+    private void reverseRegEx() {
+        isRegex = !isRegex;
     }
 
     private JButton setNextMatchButton() {
@@ -169,7 +177,7 @@ public class TextEditor extends JFrame {
         if (searchEngine != null) {
             String text = textArea.getText();
             String searchFor = searchField.getText();
-          int[] temp =  searchEngine.findNext(text, searchFor, isRegex);
+            int[] temp = searchEngine.findNext(text, searchFor, isRegex);
             if (temp != null) {
                 int index = temp[0];
                 int length = temp[1];
@@ -191,7 +199,7 @@ public class TextEditor extends JFrame {
         if (searchEngine != null) {
             String text = textArea.getText();
             String searchFor = searchField.getText();
-            int[] temp =  searchEngine.findPrevious(text, searchFor, isRegex);
+            int[] temp = searchEngine.findPrevious(text, searchFor, isRegex);
             if (temp != null) {
                 int index = temp[0];
                 int length = temp[1];
@@ -213,7 +221,7 @@ public class TextEditor extends JFrame {
         String text = textArea.getText();
         String searchFor = searchField.getText();
         searchEngine = new SearchEngine(text, searchFor, isRegex);
-       int[]temp = searchEngine.findFirst();
+        int[] temp = searchEngine.findFirst();
         if (temp != null) {
             int index = temp[0];
             int length = temp[1];
@@ -230,7 +238,7 @@ public class TextEditor extends JFrame {
     private JButton setLoadButton() {
         ImageIcon loadIcon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\open-icon.png");
         JButton loadButton = new JButton(loadIcon);
-        loadButton.setName("LoadButton");
+        loadButton.setName("OpenButton");
         loadButton.addActionListener(e -> {
             selectAndLoadFile();
         });

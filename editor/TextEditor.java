@@ -49,23 +49,16 @@ public class TextEditor extends JFrame {
         loadMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String file = fileInputField.getText();
-                try {
-                    loadFile(file);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
+                selectAndLoadFile();
             }
         });
 
         saveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String file = fileInputField.getText();
                 String text = textArea.getText();
                 try {
-                    saveFile(file, text);
+                    saveFile(text);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -93,43 +86,52 @@ public class TextEditor extends JFrame {
         fileInputField.setSize(30, 100);
         fileInputField.setVisible(true);
         fileInputField.setName("FilenameField");
-        JButton saveButton = new JButton();
+        ImageIcon saveIcon = new ImageIcon(".\\Text Editor\\task\\resources\\Save-icon.png");
+        JButton saveButton = new JButton(saveIcon);
         saveButton.setName("SaveButton");
-        saveButton.setText("Save");
         saveButton.addActionListener(e -> {
-            String file = fileInputField.getText();
             String text = textArea.getText();
             try {
-                saveFile(file, text);
+                saveFile(text);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
-        JButton loadButton = new JButton();
+        ImageIcon loadIcon = new ImageIcon(".\\Text Editor\\task\\resources\\open-icon.png");
+        JButton loadButton = new JButton(loadIcon);
         loadButton.setName("LoadButton");
-        loadButton.setText("Load");
         loadButton.addActionListener(e -> {
-            String file = fileInputField.getText();
+            selectAndLoadFile();
+        });
+        fileArea.add(loadButton);
+        fileArea.add(saveButton);
+        fileArea.add(fileInputField);
+        return fileArea;
+    }
+
+    private void selectAndLoadFile() {
+        JFileChooser fileChooser = new JFileChooser(".\\Text Editor\\task\\src");
+        fileChooser.showOpenDialog(null);
+        File file = fileChooser.getSelectedFile();
+        if (file != null) {
             try {
                 loadFile(file);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        });
-        fileArea.add(fileInputField);
-        fileArea.add(saveButton);
-        fileArea.add(loadButton);
-        return fileArea;
+        }
     }
 
-    private void loadFile(String name) throws IOException {
-        File file = new File("F:" + File.separator + "Text Editor" + File.separator + "Text Editor" + File.separator + "task" + File.separator + "src" + File.separator + name);
+    private void loadFile(File file) throws IOException {
         String text = file.isFile() ? Files.readString(file.toPath()) : "";
         textArea.setText(text);
     }
 
-    private void saveFile(String name, String text) throws IOException {
-        File file = new File("F:" + File.separator + "Text Editor" + File.separator + "Text Editor" + File.separator + "task" + File.separator + "src" + File.separator + name);
+    private void saveFile(String text) throws IOException {
+        JFileChooser fileChooser = new JFileChooser(".\\Text Editor\\task\\src");
+        fileChooser.showSaveDialog(null);
+        File file = fileChooser.getSelectedFile();
+//        File file = new File("F:" + File.separator + "Text Editor" + File.separator + "Text Editor" + File.separator + "task" + File.separator + "src" + File.separator + name);
         FileWriter writer = new FileWriter(file);
         writer.write(text);
         writer.close();

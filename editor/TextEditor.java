@@ -14,6 +14,8 @@ public class TextEditor extends JFrame {
     JTextArea textArea;
     JMenuBar menuBarFile;
     JTextField searchField;
+    SearchEngine searchEngine;
+    Boolean isRegex;
 
     public TextEditor() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,6 +27,7 @@ public class TextEditor extends JFrame {
         add(setFileArea(), BorderLayout.NORTH);
         menuBarFile = setMenuBar();
         setJMenuBar(menuBarFile);
+        isRegex = false;
         setVisible(true);
     }
 
@@ -141,7 +144,10 @@ public class TextEditor extends JFrame {
         JCheckBox useRegEx = new JCheckBox("Use regex");
         useRegEx.setName("UseRegExCheckbox");
 
-        //todo add action listener
+        useRegEx.addActionListener(e -> {
+            isRegex = !isRegex;
+        });
+
         return useRegEx;
     }
 
@@ -149,7 +155,19 @@ public class TextEditor extends JFrame {
         ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\next-icon.png");
         JButton next = new JButton(icon);
         next.setName("NextMatchButton");
-        //TODO add action listener
+
+        next.addActionListener(e -> {
+            if (searchEngine != null) {
+                String text = textArea.getText();
+                String searchFor = searchField.getText();
+              int[] temp =  searchEngine.findNext(text, searchFor, isRegex);
+                if (temp != null) {
+                    int index = temp[0];
+                    int length = temp[1];
+                    showFindText(index, length);
+                }
+            }
+        });
 
         return next;
     }
@@ -167,9 +185,27 @@ public class TextEditor extends JFrame {
         ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\search-icon.png");
         JButton search = new JButton(icon);
         search.setName("StartSearchButton");
+        search.addActionListener(e -> startSearch());
 
-        //TODO add action Listener
         return search;
+    }
+
+    private void startSearch() {
+        String text = textArea.getText();
+        String searchFor = searchField.getText();
+        searchEngine = new SearchEngine(text, searchFor, isRegex);
+       int[]temp = searchEngine.findFirst();
+        if (temp != null) {
+            int index = temp[0];
+            int length = temp[1];
+            showFindText(index, length);
+        }
+    }
+
+    private void showFindText(int index, int length) {
+        textArea.setCaretPosition(index + length);
+        textArea.select(index, index + length);
+        textArea.grabFocus();
     }
 
     private JButton setLoadButton() {

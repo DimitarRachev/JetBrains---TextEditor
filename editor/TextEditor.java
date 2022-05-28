@@ -146,7 +146,7 @@ public class TextEditor extends JFrame {
     }
 
     private JButton setNextMatchButton() {
-        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\resources\\next-icon.png");
+        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\next-icon.png");
         JButton next = new JButton(icon);
         next.setName("NextMatchButton");
         //TODO add action listener
@@ -155,7 +155,7 @@ public class TextEditor extends JFrame {
     }
 
     private JButton setPreviousMatchButton() {
-        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\resources\\previous-icon.png");
+        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\previous-icon.png");
         JButton previous = new JButton(icon);
         previous.setName("PreviousMatchButton");
         //TODO add Action Listener
@@ -164,7 +164,7 @@ public class TextEditor extends JFrame {
     }
 
     private JButton setStartSearchButton() {
-        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\resources\\search-icon.png");
+        ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\search-icon.png");
         JButton search = new JButton(icon);
         search.setName("StartSearchButton");
 
@@ -173,7 +173,7 @@ public class TextEditor extends JFrame {
     }
 
     private JButton setLoadButton() {
-        ImageIcon loadIcon = new ImageIcon(".\\Text Editor\\task\\resources\\open-icon.png");
+        ImageIcon loadIcon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\open-icon.png");
         JButton loadButton = new JButton(loadIcon);
         loadButton.setName("LoadButton");
         loadButton.addActionListener(e -> {
@@ -184,7 +184,7 @@ public class TextEditor extends JFrame {
     }
 
     private JButton setSaveButton() {
-        ImageIcon saveIcon = new ImageIcon(".\\Text Editor\\task\\resources\\Save-icon.png");
+        ImageIcon saveIcon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\Save-icon.png");
         JButton saveButton = new JButton(saveIcon);
         saveButton.setName("SaveButton");
         saveButton.addActionListener(e -> {

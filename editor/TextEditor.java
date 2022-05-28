@@ -57,7 +57,9 @@ public class TextEditor extends JFrame {
         JMenuItem useRegEx = new JMenuItem("Use regular expressions");
         searchMenu.setName("MenuUseRegExp");
 
-//TODO add action Listeners to menu items
+//TODO add action Listeners to menu items only previous case remains
+        startSearch.addActionListener( e -> startSearch());
+        nextMatch.addActionListener( e -> searchNext());
 
         searchMenu.add(startSearch);
         searchMenu.add(previousSearch);
@@ -157,28 +159,45 @@ public class TextEditor extends JFrame {
         next.setName("NextMatchButton");
 
         next.addActionListener(e -> {
-            if (searchEngine != null) {
-                String text = textArea.getText();
-                String searchFor = searchField.getText();
-              int[] temp =  searchEngine.findNext(text, searchFor, isRegex);
-                if (temp != null) {
-                    int index = temp[0];
-                    int length = temp[1];
-                    showFindText(index, length);
-                }
-            }
+            searchNext();
         });
 
         return next;
+    }
+
+    private void searchNext() {
+        if (searchEngine != null) {
+            String text = textArea.getText();
+            String searchFor = searchField.getText();
+          int[] temp =  searchEngine.findNext(text, searchFor, isRegex);
+            if (temp != null) {
+                int index = temp[0];
+                int length = temp[1];
+                showFindText(index, length);
+            }
+        }
     }
 
     private JButton setPreviousMatchButton() {
         ImageIcon icon = new ImageIcon(".\\Text Editor\\task\\src\\resources\\previous-icon.png");
         JButton previous = new JButton(icon);
         previous.setName("PreviousMatchButton");
-        //TODO add Action Listener
+        previous.addActionListener(e -> searchPrevious());
 
         return previous;
+    }
+
+    private void searchPrevious() {
+        if (searchEngine != null) {
+            String text = textArea.getText();
+            String searchFor = searchField.getText();
+            int[] temp =  searchEngine.findPrevious(text, searchFor, isRegex);
+            if (temp != null) {
+                int index = temp[0];
+                int length = temp[1];
+                showFindText(index, length);
+            }
+        }
     }
 
     private JButton setStartSearchButton() {
